@@ -1,0 +1,27 @@
+# menentukan versi docker compose yang digunakan
+version: "3"
+
+# mendefinisikan service yang akan dijalankan
+services:
+  # service yang pertama (aplikasi item-app)
+  item-app:
+    # image yang digunakan
+    image: louisaldorio/item-app:v1
+    # restart policy
+    restart: unless-stopped
+    # binding port 8080 dari container ke port 8080 di host
+    ports:
+      - 8080:8080
+  # service yang kedua (database item-db)
+  item-db:
+    # image yang digunakan
+    image: mongo:3
+    # restart policy
+    restart: unless-stopped
+    # binding volume dari container ke volume docker
+    volumes:
+      - app-db:/data/db
+
+# mendefinisikan volume docker
+volumes:
+  app-db:
