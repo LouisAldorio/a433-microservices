@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: karsajobs-ui-deployment
+  namespace: karsajobs-ns
+  labels:
+    app: karsajobs-ui
+    tier: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: karsajobs-ui
+        tier: frontend
+    spec:
+      containers:
+      - name: client
+        image: ghcr.io/louisaldorio/karsajobs-ui:latest
+        imagePullPolicy: "Always"
+        ports:
+          - containerPort: 8000
+        resources:
+          limits:
+            memory: 512Mi
+            cpu: "1"
+          requests:
+            memory: 512Mi
+            cpu: 20m

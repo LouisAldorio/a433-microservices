@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: karsajobs-deployment
+  namespace: karsajobs-ns
+  labels:
+    app: karsajobs
+    tier: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: app
+  template:
+    metadata:
+      labels:
+        app: karsajobs
+        tier: app
+    spec:
+      containers:
+      - name: server
+        image: ghcr.io/louisaldorio/karsajobs:latest
+        imagePullPolicy: "Always"
+        ports:
+          - containerPort: 8080
+        env:
+          - name: APP_PORT
+            value: "8080"
+          - name: MONGO_HOST
+            value: "mongo"
+          - name: MONGO_USER
+            valueFrom:
+              secretKeyRef:
+                name: mongo-credentials
+                key: MONGO_ROOT_USERNAME
+          - name: MONGO_PASS
+            valueFrom:
+              secretKeyRef:
+                name: mongo-credentials
+                key: MONGO_ROOT_PASSWORD
+        resources:
+          limits:
+            memory: 512Mi
+            cpu: "1"
+          requests:
+            memory: 512Mi
+            cpu: 20m
